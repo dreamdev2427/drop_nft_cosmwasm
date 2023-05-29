@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+.dark .dark\:bg-gray-bg {
+  --tw-bg-opacity: 1;
+  background: linear-gradient(90deg, #0e0e0e 48.77%, rgba(14, 14, 14, 0) 74.19%),
+    linear-gradient(0deg, #12161b, #12161b), #0e0e0e;
+}
+
+.ReactModal__Overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0px;
+  background-color: rgba(255, 255, 255, 0.75);
+}

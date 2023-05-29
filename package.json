@@ -1,0 +1,51 @@
+{
+  "name": "@cosmology/tailwindcss",
+  "version": "1.8.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@cosmjs/cosmwasm-stargate": "0.29.5",
+    "@cosmjs/stargate": "0.29.5",
+    "@cosmos-kit/core": "1.3.0",
+    "@cosmos-kit/cosmostation": "0.15.13",
+    "@cosmos-kit/keplr": "0.33.13",
+    "@cosmos-kit/leap": "0.14.12",
+    "@cosmos-kit/react": "1.3.11",
+    "@emotion/react": "11.10.6",
+    "@emotion/styled": "11.10.6",
+    "@headlessui/react": "^1.7.4",
+    "@heroicons/react": "^2.0.13",
+    "@types/react-modal": "^3.16.0",
+    "bowser": "^2.11.0",
+    "chain-registry": "1.10.0",
+    "copy-to-clipboard": "^3.3.2",
+    "framer-motion": "9.0.7",
+    "next": "12.2.5",
+    "postcss": "^8.4.16",
+    "qrcode.react": "^3.1.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "react-modal": "^3.16.1",
+    "tailwindcss": "^3.2.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "@tailwindcss/typography": "^0.5.8",
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.9",
+    "autoprefixer": "^10.4.13",
+    "eslint": "8.27.0",
+    "eslint-config-next": "13.0.5",
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "typescript": "4.9.3"
+  }
+}
