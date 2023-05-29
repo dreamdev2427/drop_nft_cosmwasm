@@ -1,0 +1,1 @@
+# drop_nft_cosomwasm
