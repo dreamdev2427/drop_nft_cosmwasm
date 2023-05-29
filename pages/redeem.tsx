@@ -65,13 +65,13 @@ export default function Home() {
           </div>
 
           <div className="container flex flex-col w-full mt-10 mb-5">
-            <Link href="https://osmosis.zone/" target="_blank">
-              <button className="w-full bg-[#e00036] py-2.5 rounded-md text-xl">
+            <a href="https://osmosis.zone/" target="_blank" rel="noreferrer">
+              <button className="w-full bg-[#e00036] hover:bg-[#ad062e] transition py-2.5 rounded-md text-xl">
                 BUY $SHIRT
               </button>
-            </Link>
+            </a>
             <button
-              className="mt-5 w-full bg-gray-500 p-2.5 rounded-md text-xl"
+              className="mt-5 w-full bg-gray-500 hover:bg-gray-600 transition p-2.5 rounded-md text-xl"
               onClick={() => setModalIsOpen(true)}
             >
               REDEEM

@@ -116,7 +116,7 @@ export const WalletSection = () => {
 
     return (
       <button
-        className="inline-flex items-center justify-center w-40 h-12 text-[#e0e0e0] hover:text-white rounded-lg"
+        className="inline-flex items-center justify-center min-w-40 h-12 text-[#e0e0e0] hover:text-white rounded-lg px-2"
         onClick={onClick}
       >
         <buttonData.icon className="flex-shrink-0 w-5 h-5 mr-2 text-white" />
@@ -151,7 +151,7 @@ export const WalletSection = () => {
               )}
             </div> */}
       {/* {address ? <Address>{address}</Address> : <></>} */}
-      <div className="inline-flex items-center justify-center w-40 h-12 text-[#e0e0e0] hover:text-white hover:border-2 hover:border-[#fff] rounded-lg bg-[#e00036] ">
+      <div className="inline-flex items-center justify-center min-w-40 h-12 text-[#e0e0e0] hover:text-white hover:bg-[#ad062e] transition rounded-lg bg-[#e00036] px-2">
         {_renderConnectButton}
       </div>
       {/* </div> */}
