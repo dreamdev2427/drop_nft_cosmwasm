@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 @tailwind variants;
+@font-face {
+  font-family: "Microgramma";
+  src: url("../asset/OpenSans/Microgramma.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
 
 .dark .dark\:bg-gray-bg {
   --tw-bg-opacity: 1;
@@ -15,5 +25,8 @@
   align-items: center;
   position: fixed;
   inset: 0px;
-  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.micro-font {
+  font-family: "Microgramma", sans-serif;
 }
