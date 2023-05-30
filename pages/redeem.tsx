@@ -31,12 +31,11 @@ export default function Redeem() {
       : [];
     const sku = "shirtdrop";
     const shirt = productHelper.getBySKU(sku, mappedProducts);
-    console.log(">>>>>", shirt);
     setShirt(shirt[0]);
   };
 
   useEffect(() => {
-    // getShirt();
+    getShirt();
   }, []);
 
   return (
