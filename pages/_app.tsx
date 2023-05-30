@@ -14,6 +14,8 @@ import { SigningCosmWasmProvider } from '../contexts/cosmwasm';
 
 import { SignerOptions } from '@cosmos-kit/core';
 import { chains, assets } from 'chain-registry';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateCosmosApp({ Component, pageProps }: AppProps) {
   const signerOptions: SignerOptions = {
@@ -56,6 +58,7 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
             <Component {...pageProps} />
           </div>
         </ThemeProvider>
+        <ToastContainer />
       </SigningCosmWasmProvider>
     </ChainProvider>
   );
