@@ -158,15 +158,17 @@ export default function Redeem() {
 
           <div className="container flex flex-col w-full mt-10 mb-5">
             <a href="https://osmosis.zone/" target="_blank" rel="noreferrer">
-              <button className="w-full bg-[#e00036] hover:bg-[#ad062e] transition py-2.5 rounded-md text-xl">
+              <button 
+                className="w-full bg-gray-500 hover:bg-gray-600 transition py-2.5 rounded-md text-xl"
+              >
                 BUY $SHIRT
               </button>
             </a>
             <button
-              className="mt-5 w-full bg-gray-500 hover:bg-gray-600 transition p-2.5 rounded-md text-xl"
+              className="mt-5 w-full bg-[#e00036] hover:bg-[#ad062e] transition p-2.5 rounded-md text-xl"
               onClick={() => {
                 if (!size) {
-                  toast.warn("Please select the size.");
+                  toast.warn("Please select a size.");
                   return;
                 }
                 setModalIsOpen(true);
