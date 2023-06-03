@@ -181,7 +181,7 @@ export default function Redeem() {
         </div>
       </div>
 
-      <div className="flex justify-center  text-sm text-center bg-transparent mt-5 mb-2 relative">
+      <div className="flex justify-center  text-sm text-center bg-transparent mt-5 mb-2 relative min-h-[80px]">
         <a href="https://artlink.network/" className="absolute bottom-0 right-2 flex gap-2 items-center" target="_blank" rel="noreferrer">
           <span className="text-white text-lg">Powered by</span>
           <Image src="/artlink.png" width={100} height={18} layout="fixed" />
