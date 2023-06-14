@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Product, Dependency, WalletSection } from "../components";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -16,7 +17,7 @@ import { toast } from "react-toastify";
 import { storefront } from "../utils/storefront";
 import productHelper from "../utils/productHelper";
 import { useSigningClient } from "../contexts/cosmwasm";
-import { numberWithCommas } from "../utils/utils";
+import { convertDenomToMicroDenom, isEmpty, numberWithCommas } from "../utils/utils";
 import styles from "../styles/layout.module.scss";
 
 Modal.setAppElement("#__next");
@@ -39,15 +40,38 @@ const steps = [
 ];
 
 export default function Redeem() {
-  const chainName = process.env.NEXT_PUBLIC_CHAIN ?? "stargaze";
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [redeemAmount, setRedeemAmount] = useState(0);
   const [shirt, setShirt] = useState(null);
-  const { balances }: any = useSigningClient();
+  const { pending, address, balances, burnToken }: any = useSigningClient();
   const [size, setSize] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
+  const router = useRouter();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (activeStep === 0) {
+      if (balances['shirt'] <= 0) {
+        toast.warn('Insufficient $SHIRT balance.');
+        return;
+      }
+      try {
+        const res = await burnToken(address, convertDenomToMicroDenom(1));
+        if (res) {
+          toast.success('Successfully burnt 1 x $SHIRT.');
+        } else {
+          toast.error("Failed the transaction.");
+          return;
+        }
+      } catch (err) {
+        toast.error(err);
+        return;
+      }
+    } else if (activeStep === 2) {
+      const user = {
+        size,
+      }
+      sessionStorage.setItem("user", JSON.stringify(user));
+      router.push('/cart');
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -167,6 +191,10 @@ export default function Redeem() {
             <button
               className="mt-5 w-full bg-[#e00036] hover:bg-[#ad062e] transition p-2.5 rounded-md text-xl"
               onClick={() => {
+                if (!address) {
+                  toast.warn("Please connect wallet.");
+                  return;
+                }
                 if (!size) {
                   toast.warn("Please select a size.");
                   return;
@@ -195,6 +223,12 @@ export default function Redeem() {
         overlayClassName="bg-gray-500 bg-opacity-75 transition-opacity opacity-100"
         className="bg-gray-800 flex flex-col justify-center items-center rounded-2xl relative p-10"
       >
+        {pending && (
+          <div className="absolute w-full h-full bg-black bg-opacity-50 rounded-2xl z-50 flex flex-col justify-center items-center">
+            <ReactLoading type="spin" color="#fff" />
+            <span className="text-white text-lg">Pending...</span>
+          </div>
+        )}
         <h2 className="top-10 text-2xl text-white text-bold mb-5">REDEEM</h2>
         <button
           className="absolute right-5 top-5 text-md text-white text-bold"
@@ -218,6 +252,9 @@ export default function Redeem() {
             </Typography>
             <Typography className="text-white">
               {steps[activeStep]?.description}
+              {activeStep === 0 && balances && (
+                <p className="my-1">Balance: {balances['shirt']} $SHIRT</p>
+              )}
             </Typography>
             <div className="flex gap-2">
               <Button
@@ -236,7 +273,7 @@ export default function Redeem() {
                 onClick={handleNext}
                 sx={{ mt: 1, mr: 1 }}
               >
-                {activeStep === steps.length - 1 ? "Finish" : "Continue"}
+                {activeStep === steps.length - 1 ? "Order" : "Continue"}
               </Button>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { useChain, useWalletClient } from '@cosmos-kit/react';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { isDeliverTxFailure } from '@cosmjs/stargate'
 import { toUtf8, toBase64 } from '@cosmjs/encoding';
-import { chainName, defaultDenom } from '../config';
+import { config, chainName, defaultDenom } from '../config';
 import { convertMicroDenomToDenom } from '../utils/utils';
 
 const defaultFee = {
@@ -42,17 +42,52 @@ export const SigningCosmWasmProvider = ({ children }: any) => {
         rpcEndpoint = `https://rpc.osmosis.zone`;
       }
 
-      if (address) {
-        const balanceList = {};
-        const native: JsonObject = await signingClient?.getBalance(address, defaultDenom);
-        console.log("< Native > ", native)
-        if (native) {
-          balanceList[native.denom] = convertMicroDenomToDenom(native.amount)
+      try {
+        if (address) {
+          const balanceList = {};
+          const native: JsonObject = await signingClient?.getBalance(address, defaultDenom);
+
+          if (native) {
+            balanceList[native.denom] = convertMicroDenomToDenom(native.amount)
+          }
+          if (signingClient) {
+            const resp = await signingClient.queryContractSmart(config.CW20_CONTRACT, {
+              balance: { address },
+            });
+            balanceList['shirt'] = convertMicroDenomToDenom(resp.balance);
+          }
+          console.log('>>>>', balanceList)
+          setBalances(balanceList);
         }
-        setBalances(balanceList);
+      } catch (err) {
+        console.log(err)
       }
     } else {
       // await connect();
+    }
+  }
+
+  const burnToken = async (sender, amount) => {
+    const signingClient = await getSigningCosmWasmClient();
+    if (!signingClient) return null;
+    setPending(true);
+    try {
+      const result: any = await signingClient.execute(
+        sender,
+        config.CW20_CONTRACT,
+        {
+          burn: {
+            amount,
+          },
+        },
+        defaultFee
+      );
+      console.log(result?.transactionHash)
+      setPending(false);
+      return result?.transactionHash;
+    } catch (err) {
+      setPending(false);
+      throw err;
     }
   }
 
@@ -64,8 +99,10 @@ export const SigningCosmWasmProvider = ({ children }: any) => {
     <CosmwasmContext.Provider
       value={{
         pending,
+        address,
         balances,
         connectWallet,
+        burnToken
       }}>
       {children}
     </CosmwasmContext.Provider>

@@ -15,13 +15,14 @@ import { SigningCosmWasmProvider } from '../contexts/cosmwasm';
 import { SignerOptions } from '@cosmos-kit/core';
 import { chains, assets } from 'chain-registry';
 import { ToastContainer } from "react-toastify";
+import { osmotestnet, osmotestnetAssets } from '../config/testosmosis';
 import "react-toastify/dist/ReactToastify.css";
 
 function CreateCosmosApp({ Component, pageProps }: AppProps) {
   const signerOptions: SignerOptions = {
     signingStargate: (chain: Chain) => {
       switch (chain.chain_name) {
-        case "osmosis":
+        case "osmosistestnet5":
           return {
             gasPrice: new GasPrice(Decimal.zero(1), "uosmo"),
           };
@@ -33,8 +34,8 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChainProvider
-      chains={chains}
-      assetLists={assets}
+      chains={[...chains, osmotestnet]}
+      assetLists={[...assets, osmotestnetAssets]}
       wallets={[...keplrWallets, ...cosmostationWallets, ...leapWallets]}
       walletConnectOptions={{
         signClient: {
@@ -47,6 +48,15 @@ function CreateCosmosApp({ Component, pageProps }: AppProps) {
             icons: [],
           },
         },
+      }}
+      endpointOptions={{
+        isLazy: true,
+        endpoints: {
+          'osmosistestnet5': {
+            rpc: ['https://rpc.osmotest5.osmosis.zone'],
+            rest: ['https://lcd.osmotest5.osmosis.zone'],
+          }
+        }
       }}
       wrappedWithChakra={true}
       signerOptions={signerOptions}
