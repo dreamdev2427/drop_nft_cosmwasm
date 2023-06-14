@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Product, Dependency, WalletSection } from "../components";
+import { WalletSection } from "../components";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,22 +7,23 @@ import Modal from "react-modal";
 import { useState, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import ReactLoading from "react-loading";
-import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { toast } from "react-toastify";
+import { getCookie, setCookie } from 'cookies-next';
 import { storefront } from "../utils/storefront";
 import productHelper from "../utils/productHelper";
 import { useSigningClient } from "../contexts/cosmwasm";
-import { convertDenomToMicroDenom, isEmpty, numberWithCommas } from "../utils/utils";
+import { convertDenomToMicroDenom, numberWithCommas } from "../utils/utils";
 import styles from "../styles/layout.module.scss";
 
 Modal.setAppElement("#__next");
 
-const PUBLIC_DENOM = process.env.NEXT_PUBLIC_DENOM;
+const cookieKey = "Suitdrop.xyz $SHIRT approval";
+
 const steps = [
   {
     label: "Burn $SHIRT",
@@ -67,9 +68,11 @@ export default function Redeem() {
       }
     } else if (activeStep === 2) {
       const user = {
+        address,
         size,
+        date: Date.now()
       }
-      sessionStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("user", btoa(btoa(JSON.stringify(user))));
       router.push('/cart');
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -93,6 +96,11 @@ export default function Redeem() {
     const sku = "shirtdrop";
     const shirt = productHelper.getBySKU(sku, mappedProducts);
     setShirt(shirt[0]);
+
+    const approvalCookie = getCookie(cookieKey);
+    if (!approvalCookie) {
+      setCookie(cookieKey, true);
+    }
   };
 
   useEffect(() => {
@@ -253,7 +261,7 @@ export default function Redeem() {
             <Typography className="text-white">
               {steps[activeStep]?.description}
               {activeStep === 0 && balances && (
-                <p className="my-1">Balance: {balances['shirt']} $SHIRT</p>
+                <p className="my-1">Balance: {numberWithCommas(balances['shirt'])} $SHIRT</p>
               )}
             </Typography>
             <div className="flex gap-2">

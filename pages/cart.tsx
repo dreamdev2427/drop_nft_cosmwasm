@@ -7,16 +7,18 @@ import ReactLoading from "react-loading";
 import { toast } from "react-toastify";
 import { storefront } from "../utils/storefront";
 import productHelper from "../utils/productHelper";
+import { useSigningClient } from "../contexts/cosmwasm";
 
 export default function Cart() {
   const [shirt, setShirt] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
   const [shopifyCartURL, setShopifyCartURL] = useState(null);
+  const { address }: any = useSigningClient();
 
   const getUser = () => {
     let savedUser = sessionStorage.getItem("user");
     if (savedUser) {
-      return JSON.parse(savedUser);
+      return JSON.parse(atob(atob(savedUser)));
     }
     return null;
   }
@@ -33,7 +35,7 @@ export default function Cart() {
     setShirt(shirt[0]);
 
     const user = getUser();
-    if (user) {
+    if (user && address && user?.address === address) {
       setSelectedSize(user?.size);
     }
   };
@@ -81,8 +83,8 @@ export default function Cart() {
 
     try {
       const variables = {};
-      const url = process.env.NEXT_PUBLIC_SHOPIFY_API_URL;
-      const response = await fetch(url, {
+      const API_URL = process.env.NEXT_PUBLIC_SHOPIFY_API_URL + "api/2023-04/graphql.json";
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,7 +100,7 @@ export default function Cart() {
 
   useEffect(() => {
     getShirt();
-  }, []);
+  }, [address]);
 
   useEffect(() => {
     if (shirt && selectedSize) {
@@ -126,10 +128,10 @@ export default function Cart() {
       <div className="flex flex-row justify-end items-center mb-2 gap-5">
         <Link
           className="inline-flex items-center justify-center w-12 h-12 text-black border rounded-lg dark:text-white hover:bg-black/10 dark:hover:bg-white/10 border-black/10 dark:border-white/10 mr-2"
-          href="/"
+          href="/redeem"
         >
           <div className="hover:underline hover:underline-offset-1 text-[#e0e0e0] hover:text-white mr-2 text-lg cursor-pointer">
-            Claim Airdrop
+            Redeem
           </div>
         </Link>
         <WalletSection />
